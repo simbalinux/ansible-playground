@@ -30,16 +30,14 @@ end
 # master provision script
 $script = <<-SCRIPT
 sudo apt-get update 
-#sudo ln -sf /usr/bin/python3 /usr/bin/python  		#python 3 specific
 mkdir $HOME/ansible && cd $HOME/ansible 
 git clone https://github.com/spurin/masteringansible.git
 sudo apt-get install software-properties-common -y 
 sudo apt-add-repository --yes --update ppa:ansible/ansible 
 sudo apt-get update
 sudo apt-get install ansible -y
-#sudo apt-get install python-minimal virtualenv python-dev build-essential -y
 
-#lets setup direnv 
+# setup direnv 
 sudo apt-get install wget curl jq go tree vim -y
 cd /tmp
 wget https://github.com/direnv/direnv/releases/download/v2.18.2/direnv.linux-amd64
