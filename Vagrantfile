@@ -29,22 +29,34 @@ Vagrant.configure(2) do |config|
 end
 # master provision script
 $script = <<-SCRIPT
-sudo apt-get update 
-mkdir $HOME/ansible && cd $HOME/ansible 
-git clone https://github.com/spurin/masteringansible.git
-sudo apt-get install software-properties-common -y 
-sudo apt-add-repository --yes --update ppa:ansible/ansible 
-sudo apt-get update
-sudo apt-get install ansible -y
 
-# setup direnv 
-sudo apt-get install wget curl jq go tree vim -y
-cd /tmp
-wget https://github.com/direnv/direnv/releases/download/v2.18.2/direnv.linux-amd64
+# if !ansible then install and configure
+set -x
+if [ ! $(command -v ansible) ]; then 
 
-chmod +x direnv.linux-amd64
-
-sudo mv $PWD/direnv.linux-amd64 /usr/local/bin/direnv
-echo 'eval "$(direnv hook bash)"' >> $HOME/.bashrc
-source $HOME/.bashrc
+  # append hosts file
+  echo "10.10.10.11      ubuntu1"  | sudo  tee -a /etc/hosts             
+  echo "10.10.10.12      centos1"  | sudo  tee -a /etc/hosts             
+  echo "10.10.10.13      dnsmasq"  | sudo  tee -a /etc/hosts             
+  sleep 5
+  # install and configure ansible
+  sudo apt-get update 
+  mkdir $HOME/ansible && cd $HOME/ansible 
+  git clone https://github.com/spurin/masteringansible.git
+  sudo apt-get install software-properties-common -y 
+  sudo apt-add-repository --yes --update ppa:ansible/ansible 
+  sudo apt-get update
+  sudo apt-get install ansible -y
+  
+  # setup direnv  
+  sudo apt-get install wget curl jq go tree vim -y
+  cd /tmp
+  wget https://github.com/direnv/direnv/releases/download/v2.18.2/direnv.linux-amd64
+  
+  chmod +x direnv.linux-amd64
+  
+  sudo mv $PWD/direnv.linux-amd64 /usr/local/bin/direnv
+  echo 'eval "$(direnv hook bash)"' >> $HOME/.bashrc
+  source $HOME/.bashrc
+fi
 SCRIPT
