@@ -1,0 +1,7 @@
+.yml
+.json
+.envrc
+.vagrant
+.vim
+*.log
+credentials.csv

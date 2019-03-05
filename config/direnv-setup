@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -x
+sudo yum -y install wget curl jq go tree vim 
+cd /tmp
+wget https://github.com/direnv/direnv/releases/download/v2.18.2/direnv.linux-amd64
+
+chmod +x direnv.linux-amd64
+ 
+sudo mv $PWD/direnv.linux-amd64 /usr/local/bin/direnv
+echo 'eval "$(direnv hook bash)"' >> $HOME/.bashrc
+source $HOME/.bashrc
