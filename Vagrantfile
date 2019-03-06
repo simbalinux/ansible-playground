@@ -18,6 +18,7 @@ Vagrant.configure(2) do |config|
     host.vm.hostname = "centos1"
     host.vm.network "private_network", ip: "10.10.10.12"
     #host.vm.provision "shell", inline: "sudo yum update -y; sudo ln -sf /usr/bin/python3 /usr/bin/python"     
+    host.vm.provision "shell", inline: "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config"     
   end
 
   config.vm.define  "dnsmasq" do |host|
@@ -58,5 +59,12 @@ if [ ! $(command -v ansible) ]; then
   sudo mv $PWD/direnv.linux-amd64 /usr/local/bin/direnv
   echo 'eval "$(direnv hook bash)"' >> $HOME/.bashrc
   source $HOME/.bashrc
+fi
+
+# if KEY !exist create
+if [ -f $HOME/.ssh/id_rsa ]; then
+  echo rsa key installed
+else
+  ssh-keygen -f $HOME/.ssh/id_rsa -t rsa -N ''
 fi
 SCRIPT
