@@ -5,34 +5,36 @@ Vagrant.configure(2) do |config|
     host.vm.box = "ubuntu/xenial64"
     host.vm.hostname = "master"
     host.vm.network "private_network", ip: "10.10.10.10"
-    host.vm.provision "shell", inline: $script, privileged: false
+    host.vm.provision "shell", inline: "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd.service"     
+    host.vm.provision "shell", inline: $script, privileged: false								# run as non root user && see below for inline script 
   end
   config.vm.define  "ubuntu1" do |host|
     host.vm.box = "ubuntu/xenial64"
     host.vm.hostname = "ubuntu1"
     host.vm.network "private_network", ip: "10.10.10.11"
-    #host.vm.provision "shell", inline: "sudo apt-get update; sudo ln -sf /usr/bin/python3 /usr/bin/python"     
+    host.vm.provision "shell", inline: "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd.service"     
+    #host.vm.provision "shell", inline: "sudo apt-get update; sudo ln -sf /usr/bin/python3 /usr/bin/python"    			# optional if using python3 
   end
   config.vm.define  "centos1" do |host|
     host.vm.box = "centos/7"
     host.vm.hostname = "centos1"
     host.vm.network "private_network", ip: "10.10.10.12"
-    #host.vm.provision "shell", inline: "sudo yum update -y; sudo ln -sf /usr/bin/python3 /usr/bin/python"     
-    host.vm.provision "shell", inline: "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config"     
+    #host.vm.provision "shell", inline: "sudo yum update -y; sudo ln -sf /usr/bin/python3 /usr/bin/python"    			# optional if using python3 
+    host.vm.provision "shell", inline: "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd.service"     
   end
 
   config.vm.define  "dnsmasq" do |host|
     host.vm.box = "ubuntu/xenial64"
     host.vm.hostname = "dnsmasq"
     host.vm.network "private_network", ip: "10.10.10.13"
-    #host.vm.provision "shell", inline: "sudo apt-get update; sudo ln -sf /usr/bin/python3 /usr/bin/python"     
+    host.vm.provision "shell", inline: "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd.service"     
+    #host.vm.provision "shell", inline: "sudo apt-get update; sudo ln -sf /usr/bin/python3 /usr/bin/python"     		# optional if using python3
   end
 end
-# master provision script
-$script = <<-SCRIPT
 
+# inline script for MASTER
+$script = <<-SCRIPT
 # if !ansible then install and configure
-set -x
 if [ ! $(command -v ansible) ]; then 
 
   # append hosts file
@@ -61,7 +63,7 @@ if [ ! $(command -v ansible) ]; then
   source $HOME/.bashrc
 fi
 
-# if KEY !exist create
+# if KEY ! exist create
 if [ -f $HOME/.ssh/id_rsa ]; then
   echo rsa key installed
 else
