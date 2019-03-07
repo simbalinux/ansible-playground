@@ -13,7 +13,7 @@ Vagrant.configure(2) do |config|
     host.vm.hostname = "ubuntu1"
     host.vm.network "private_network", ip: "10.10.10.11"
     host.vm.provision "shell", inline: "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd.service"     
-    #host.vm.provision "shell", inline: "sudo apt-get update; sudo ln -sf /usr/bin/python3 /usr/bin/python"    			# optional if using python3 
+    host.vm.provision "shell", inline: "sudo apt-get update; sudo ln -sf /usr/bin/python3 /usr/bin/python"    			# optional if using python3 
   end
   config.vm.define  "centos1" do |host|
     host.vm.box = "centos/7"
@@ -27,8 +27,9 @@ Vagrant.configure(2) do |config|
     host.vm.box = "ubuntu/xenial64"
     host.vm.hostname = "dnsmasq"
     host.vm.network "private_network", ip: "10.10.10.13"
+    host.vm.provision "shell", inline: "sudo apt-get update; sudo ln -sf /usr/bin/python3 /usr/bin/python"     		        # optional if using python3
     host.vm.provision "shell", inline: "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd.service"     
-    #host.vm.provision "shell", inline: "sudo apt-get update; sudo ln -sf /usr/bin/python3 /usr/bin/python"     		# optional if using python3
+
   end
 end
 

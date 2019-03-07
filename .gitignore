@@ -1,6 +1,5 @@
 .yml
 .json
-.envrc
 .vagrant
 .vim
 *.log
