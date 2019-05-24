@@ -2,3 +2,6 @@
 centos1
 ubuntu1
 dnsmasq
+
+[all:vars]
+#ansible_python_interpreter=/usr/bin/python3
