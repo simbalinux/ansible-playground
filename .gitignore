@@ -5,3 +5,4 @@
 *.log
 credentials.csv
 README.md
+id_rsa.pub
